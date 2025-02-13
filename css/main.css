@@ -1,0 +1,39 @@
+@font-face {
+  font-family: "Noto Sans";
+  src: url("./fonts/Noto_Sans/NotoSans-VariableFont_wdth,wght.ttf")
+    format("truetype-variations");
+  font-weight: 400 700;
+  font-stretch: 75% 125%;
+}
+
+@font-face {
+  font-family: "Noto Sans";
+  src: url("./fonts/Noto_Sans/NotoSans-Italic-VariableFont_wdth,wght.ttf")
+    format("truetype-variations");
+  font-style: italic; /* asked phind for help with italic */
+  font-weight: 400 700;
+  font-stretch: 75% 125%;
+}
+
+/* use 
+    font-variation-settings: 'wght' 600, 'wdth' 90;
+    to style
+    */
+
+@font-face {
+  font-family: "Shrikhand";
+  src: url("./fonts/Shrikhand/Shrikhand-Regular.ttf") format("truetype");
+}
+
+body {
+  font-family: "Noto Sans", sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Shrikhand";
+}
