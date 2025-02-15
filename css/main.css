@@ -27,6 +27,7 @@
 
 body {
   font-family: "Noto Sans", sans-serif;
+  padding: 20px 40px;
 }
 
 h1,
@@ -36,4 +37,86 @@ h4,
 h5,
 h6 {
   font-family: "Shrikhand";
+  font-weight: normal;
+}
+
+.country:hover {
+  stroke: #333;
+}
+
+#tooltip {
+  position: absolute;
+  display: none;
+  background: #fff;
+  box-shadow: 3px 3px 3px 0px rgb(92 92 92 / 0.5);
+  border: 1px solid #ddd;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 8px;
+  min-width: 160px;
+  color: #333;
+}
+.tooltip-title {
+  color: #000;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.legend-title {
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+.legend-label {
+  font-size: 0.7rem;
+}
+
+#choropleth-container {
+  height: 0;
+}
+
+#choropleth {
+  position: relative;
+  /*top: -25px;*/
+  left: -100px;
+}
+
+#popup {
+  display: none;
+  z-index: 999;
+  position: fixed;
+}
+
+#popup-card {
+  border-radius: 10px;
+  background-color: white;
+}
+
+#popup-card button {
+  background: none;
+}
+
+#popup-focus-trap {
+  height: 100vh;
+  width: 100vw;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: black;
+  opacity: 0.25;
+}
+
+#vetChoropleth,
+#nonVetChoropleth,
+#comboChoropleth {
+  transition: all 1s;
+}
+#vetChoropleth {
+  left: 0px;
+}
+#nonVetChoropleth {
+  right: 0px;
+}
+#comboChoropleth {
+  left: 50%;
+  transform: translateX(-50%);
 }

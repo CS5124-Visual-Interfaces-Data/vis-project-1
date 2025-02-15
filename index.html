@@ -5,7 +5,44 @@
     <script src="./js/libs/topojson.min.js"></script>
   </head>
   <body>
-    <svg id="choropleth"></svg>
+    <h1>Quality of Life for Disabled Veterans and Non-Veterans</h1>
+    <svg height="5" width="5" xmlns="http://www.w3.org/2000/svg" version="1.1">
+      <defs>
+        <pattern
+          id="lightstripe"
+          patternUnits="userSpaceOnUse"
+          width="5"
+          height="5"
+          color="red"
+        >
+          <image
+            xlink:href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPSc1JyBoZWlnaHQ9JzUnPgogIDxyZWN0IHdpZHRoPSc1JyBoZWlnaHQ9JzUnIGZpbGw9J3doaXRlJy8+CiAgPHBhdGggZD0nTTAgNUw1IDBaTTYgNEw0IDZaTS0xIDFMMSAtMVonIHN0cm9rZT0nIzg4OCcgc3Ryb2tlLXdpZHRoPScxJy8+Cjwvc3ZnPg=="
+            x="0"
+            y="0"
+            width="5"
+            height="5"
+          ></image>
+        </pattern>
+      </defs>
+    </svg>
+    <div style="display: flex; justify-content: space-evenly">
+      <div><input type="checkbox" id="combine" />Combined</div>
+    </div>
+    <div id="choropleth-container">
+      <svg id="vetChoropleth"></svg>
+      <svg id="nonVetChoropleth"></svg>
+      <svg id="comboChoropleth"></svg>
+    </div>
+    <div id="popup">
+      <div id="#popup-focus-trap">
+        <button id="popup-exit">X</button>
+        <div id="bargraph-container">
+          <svg id="bargraph"></svg>
+        </div>
+      </div>
+      <div id="popup-focus-trap"></div>
+    </div>
+    <div id="tooltip"></div>
     <script type="module" src="./js/main.js"></script>
   </body>
 </html>
