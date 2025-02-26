@@ -239,17 +239,28 @@ export class ChoroplethMap {
           (f) => f.cnty_fips === +d.id
         )?.NonVetsDisabilty;
 
-        if (vetVal && nonVetVal) {
-          return `url(#${vis.createStripedPattern(
-            vis.vetColorScale(vetVal),
-            vis.nonVetColorScale(nonVetVal)
-          )})`;
-        } else if (vetVal) {
-          return vis.vetColorScale(vetVal);
-        } else if (nonVetVal) {
-          return vis.nonVetColorScale(nonVetVal);
+        if (vetVal === undefined) return "url(#lightstripe)";
+
+        switch (vis.type) {
+          case ChoroplethMapTypes.Vet:
+            return vis.vetColorScale(vetVal);
+            break;
+          case ChoroplethMapTypes.NonVet:
+            return vis.nonVetColorScale(nonVetVal);
+            break;
+          case ChoroplethMapTypes.Combo:
+            if (vetVal && nonVetVal && vis.type) {
+              return `url(#${vis.createStripedPattern(
+                vis.vetColorScale(vetVal),
+                vis.nonVetColorScale(nonVetVal)
+              )})`;
+            } else if (vetVal || vis.type) {
+              return vis.vetColorScale(vetVal);
+            } else if (nonVetVal || vis.type) {
+              return vis.nonVetColorScale(nonVetVal);
+            }
+            break;
         }
-        return "url(#lightstripe)";
       })
       .attr("stroke", "white");
 
@@ -323,6 +334,8 @@ export class ChoroplethMap {
 
     vis.vetLegendRect.attr("fill", "url(#vet-legend-gradient)");
     vis.nonVetLegendRect.attr("fill", "url(#non-vet-legend-gradient)");
+
+    vis.fixGraphType();
   }
 
   createStripedPattern(firstStripeColor, secondStripeColor) {
@@ -398,5 +411,32 @@ export class ChoroplethMap {
     }
 
     return id;
+  }
+
+  fixGraphType() {
+    const vis = this;
+    switch (vis.type) {
+      // hide legends that don't apply
+      case ChoroplethMapTypes.Vet:
+        vis.nonVetLegendRect.classed("legend-hidden", true);
+        vis.nonVetLegendTitle.classed("legend-hidden", true);
+        vis.nonVetLegend.classed("legend-hidden", true);
+        break;
+      case ChoroplethMapTypes.NonVet:
+        vis.vetLegendRect.classed("legend-hidden", true);
+        vis.vetLegendTitle.classed("legend-hidden", true);
+        vis.vetLegend.classed("legend-hidden", true);
+        // move this legend back to the left
+        vis.nonVetLegend = vis.chart
+          .append("g")
+          .attr("class", "legend")
+          .attr(
+            "transform",
+            `translate(${vis.config.legendLeft},${
+              vis.height - vis.config.legendBottom
+            })`
+          );
+        break;
+    }
   }
 }

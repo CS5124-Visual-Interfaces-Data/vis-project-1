@@ -72,6 +72,7 @@ h6 {
 
 #choropleth-container {
   height: 0;
+  position: relative;
 }
 
 #choropleth {
@@ -105,18 +106,28 @@ h6 {
   opacity: 0.25;
 }
 
-#vetChoropleth,
-#nonVetChoropleth,
-#comboChoropleth {
+#vetC-container,
+#nonVetC-container,
+#comboC-container {
+  position: absolute;
   transition: all 1s;
+  transform: translateX(0);
 }
-#vetChoropleth {
+#vetC-container {
   left: 0px;
+  opacity: 1;
 }
-#nonVetChoropleth {
+#nonVetC-container {
   right: 0px;
+  opacity: 1;
 }
-#comboChoropleth {
+#comboC-container {
+  top: 0px;
   left: 50%;
   transform: translateX(-50%);
+  opacity: 0;
+}
+
+.legend-hidden {
+  display: none !important;
 }

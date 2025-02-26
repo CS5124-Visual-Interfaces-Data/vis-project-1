@@ -23,40 +23,93 @@ d3.csv("../data/desired_data.csv").then(function (data) {
   });
 
   // handle combining
-  const vetC = document.getElementById("vetChoropleth");
-  const nonVetC = document.getElementById("nonVetChoropleth");
-  const comboC = document.getElementById("comboChoropleth");
+  const vetC = document.getElementById("vetC-container");
+  const nonVetC = document.getElementById("nonVetC-container");
+  const comboC = document.getElementById("comboC-container");
+  const combineCheckbox = document.getElementById("combine");
 
-  let currentlyChanging = false;
-  document
-    .getElementById("combine")
-    .addEventListener("toggle", async (event) => {
-      const combine = document.getElementById("combine");
-      if (currentlyChanging) {
-        combine.checked = !combine.checked;
-        return;
-      }
-      currentlyCombining = true;
-      if (combine) {
-        comboC.style.opacity = 1;
-        await setTimeout(() => {}, 300);
-        comboC.style.opacity = 0;
-      }
-    });
+  let isAnimating = false;
+  async function combineElements() {
+    if (isAnimating) return;
+    isAnimating = true;
+
+    // Start moving elements toward center
+    vetC.style.transform = "translateX(50%)";
+    nonVetC.style.transform = "translateX(-50%)";
+
+    // Fade out side elements
+    vetC.style.opacity = "0";
+    nonVetC.style.opacity = "0";
+
+    // Wait for fade out
+    await new Promise((resolve) => setTimeout(resolve, 300));
+
+    // Hide side elements completely
+    //vetC.style.display = "none";
+    //nonVetC.style.display = "none";
+
+    // Show and fade in combined element
+    comboC.style.display = "block";
+    comboC.style.opacity = "1";
+
+    isAnimating = false;
+  }
+
+  async function separateElements() {
+    if (isAnimating) return;
+    isAnimating = true;
+
+    // Fade out combined element
+    comboC.style.opacity = "0";
+
+    // Wait for fade out
+    await new Promise((resolve) => setTimeout(resolve, 300));
+
+    // Hide combined element completely
+    //comboC.style.display = "none";
+
+    // Show side elements
+    vetC.style.display = "block";
+    nonVetC.style.display = "block";
+    vetC.style.opacity = "1";
+    nonVetC.style.opacity = "1";
+
+    // Reset positions
+    vetC.style.transform = "translateX(0)";
+    nonVetC.style.transform = "translateX(0)";
+
+    isAnimating = false;
+  }
+
+  // Event listener
+  combineCheckbox.addEventListener("change", async (event) => {
+    if (isAnimating) {
+      event.target.checked = !event.target.checked;
+      return;
+    }
+
+    if (event.target.checked) {
+      await combineElements();
+    } else {
+      await separateElements();
+    }
+  });
 
   const barGraph = new BarGraph(
     {
       parentElement: "#bargraph",
       containerHeight: 625,
-      containerWidth: 850,
+      containerWidth: document.width,
     },
     data
   );
+  let smolWidth = window.innerWidth / 2.25;
+  let smolHeight = smolWidth / 1.25;
   const vetChoroplethMap = new ChoroplethMap(
     {
       parentElement: "#vetChoropleth",
-      containerHeight: 625,
-      containerWidth: 850,
+      containerHeight: smolHeight,
+      containerWidth: smolWidth,
     },
     data,
     barGraph,
@@ -65,8 +118,8 @@ d3.csv("../data/desired_data.csv").then(function (data) {
   const nonVetChoroplethMap = new ChoroplethMap(
     {
       parentElement: "#nonVetChoropleth",
-      containerHeight: 625,
-      containerWidth: 850,
+      containerHeight: smolHeight,
+      containerWidth: smolWidth,
     },
     data,
     barGraph,
