@@ -4,33 +4,31 @@ export class ScatterPlot {
       parentElement: _config.parentElement,
       containerWidth: _config.containerWidth || 500,
       containerHeight: _config.containerHeight || 400,
-      margin: _config.margin || { top: 0, right: 0, bottom: 0, left: 0 },
+      margin: _config.margin || { top: 40, right: 40, bottom: 60, left: 80 },
       tooltipPadding: 10,
       legendBottom: 25,
       legendLeft: 100,
       legendRectHeight: 12,
       legendRectWidth: 150,
     };
-
     this.data = _data;
-
     this.initVis();
   }
 
   initVis() {
     let vis = this;
 
-    // Width and height as the inner dimensions of the chart area- as before
+    // Width and height as the inner dimensions of the chart area
     vis.width =
       vis.config.containerWidth -
       vis.config.margin.left -
       vis.config.margin.right;
+
     vis.height =
       vis.config.containerHeight -
       vis.config.margin.top -
       vis.config.margin.bottom;
 
-    // Define 'svg' as a child-element (g) from the drawing area and include spaces
     // Add <svg> element (drawing space)
     vis.svg = d3
       .select(vis.config.parentElement)
@@ -38,7 +36,6 @@ export class ScatterPlot {
       .attr("height", vis.config.containerHeight);
 
     // Append group element that will contain our actual chart
-    // and position it according to the given margin config
     vis.chart = vis.svg
       .append("g")
       .attr(
@@ -46,41 +43,85 @@ export class ScatterPlot {
         `translate(${vis.config.margin.left},${vis.config.margin.top})`
       );
 
-    vis.xScale = d3.scaleLinear().domain([0, 4000]).range([0, vis.width]);
+    // Create scales based on data values
+    vis.xScale = d3
+      .scaleLinear()
+      .domain(d3.extent(vis.data, (d) => d.VetsDisabilty))
+      .range([0, vis.width]);
+
+    vis.yScale = d3
+      .scaleLinear()
+      .domain(d3.extent(vis.data, (d) => d.NonVetsDisabilty))
+      .range([vis.height, 0]);
+
+    // Add X axis
     vis.chart
       .append("g")
-      .attr("transform", "translate(0," + vis.height + ")")
+      .attr("transform", `translate(0,${vis.height})`)
       .call(d3.axisBottom(vis.xScale));
 
     // Add Y axis
-    vis.yScale = d3.scaleLinear().domain([0, 500000]).range([vis.height, 0]);
     vis.chart.append("g").call(d3.axisLeft(vis.yScale));
+
+    // Add labels
+    vis.chart
+      .append("text")
+      .attr("class", "axis-label")
+      .attr("x", vis.width / 2)
+      .attr("y", vis.height + 40)
+      .attr("text-anchor", "middle")
+      .text("Disabled Veterans");
+
+    vis.chart
+      .append("text")
+      .attr("class", "axis-label")
+      .attr("transform", "rotate(-90)")
+      .attr("x", -vis.height / 2)
+      .attr("y", -60)
+      .attr("text-anchor", "middle")
+      .text("Disabled Non-veterans");
 
     vis.updateVis();
   }
 
   updateVis() {
     let vis = this;
-
     vis.renderVis();
   }
 
   async renderVis() {
     let vis = this;
 
-    // Update path fill function
-    const scatterPlot = vis.chart
-      .selectAll("dot")
+    // Clear previous dots
+    vis.chart.selectAll("circle").remove();
+
+    // Create groups for each data point
+    const points = vis.chart
+      .selectAll("g")
       .data(vis.data)
       .enter()
+      .append("g")
+      .attr(
+        "transform",
+        (d) =>
+          `translate(${vis.xScale(d.VetsDisabilty)},${vis.yScale(
+            d.NonVetsDisabilty
+          )})`
+      );
+
+    // Add circles
+    points
       .append("circle")
-      .attr("cx", function (d) {
-        return vis.xScale(d.VetsDisabilty);
-      })
-      .attr("cy", function (d) {
-        return vis.yScale(d.NonVetsDisabilty);
-      })
-      .attr("r", 1.5)
-      .style("fill", "#69b3a2");
+      .attr("r", 2)
+      .style("fill", "#004473")
+      .style("opacity", 0.25);
+
+    // Add labels
+    points
+      .append("text")
+      .attr("dy", ".31em")
+      .attr("dx", "0.5em")
+      .style("font-size", "10px")
+      .text((d) => d.label);
   }
 }
