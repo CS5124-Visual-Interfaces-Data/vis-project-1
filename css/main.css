@@ -90,10 +90,23 @@ h6 {
 #popup-card {
   border-radius: 10px;
   background-color: white;
+  width: 75vw;
+  height: 75vh;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translateX(-50%) translateY(-50%);
 }
 
-#popup-card button {
+#popup-exit {
+  position: absolute;
   background: none;
+  border: none;
+  font-size: 2em;
+  right: 5px;
+  top: 0;
+  padding: 20px;
+  color: grey;
 }
 
 #popup-focus-trap {
@@ -126,8 +139,18 @@ h6 {
   left: 50%;
   transform: translateX(-50%);
   opacity: 0;
+  display: none;
 }
 
 .legend-hidden {
   display: none !important;
+}
+
+#bargraph {
+  height: 100%;
+  width: 100%;
+}
+
+#popup-title {
+  padding-left: 50px;
 }

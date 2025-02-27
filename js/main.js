@@ -41,16 +41,19 @@ d3.csv("../data/desired_data.csv").then(function (data) {
     vetC.style.opacity = "0";
     nonVetC.style.opacity = "0";
 
-    // Wait for fade out
-    await new Promise((resolve) => setTimeout(resolve, 300));
-
-    // Hide side elements completely
-    //vetC.style.display = "none";
-    //nonVetC.style.display = "none";
-
     // Show and fade in combined element
     comboC.style.display = "block";
+
+    await new Promise((resolve) => setTimeout(resolve, 300)); // register block
+
     comboC.style.opacity = "1";
+
+    // Wait for fade out
+    await new Promise((resolve) => setTimeout(resolve, 1000)); // Full animation duration
+
+    // Hide side elements after fade out completes
+    vetC.style.display = "none";
+    nonVetC.style.display = "none";
 
     isAnimating = false;
   }
@@ -59,24 +62,28 @@ d3.csv("../data/desired_data.csv").then(function (data) {
     if (isAnimating) return;
     isAnimating = true;
 
-    // Fade out combined element
-    comboC.style.opacity = "0";
-
-    // Wait for fade out
-    await new Promise((resolve) => setTimeout(resolve, 300));
-
-    // Hide combined element completely
-    //comboC.style.display = "none";
-
     // Show side elements
     vetC.style.display = "block";
     nonVetC.style.display = "block";
-    vetC.style.opacity = "1";
-    nonVetC.style.opacity = "1";
+
+    await new Promise((resolve) => setTimeout(resolve, 300)); // register block
+
+    // Fade out combined element
+    comboC.style.opacity = "0";
 
     // Reset positions
     vetC.style.transform = "translateX(0)";
     nonVetC.style.transform = "translateX(0)";
+
+    // Wait for fade out
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    // Hide combined element after fade out
+    comboC.style.display = "none";
+
+    // Fade in side elements
+    vetC.style.opacity = "1";
+    nonVetC.style.opacity = "1";
 
     isAnimating = false;
   }
@@ -98,18 +105,18 @@ d3.csv("../data/desired_data.csv").then(function (data) {
   const barGraph = new BarGraph(
     {
       parentElement: "#bargraph",
-      containerHeight: 625,
-      containerWidth: document.width,
+      containerHeight: window.innerHeight * 0.75 - 100,
+      containerWidth: window.innerWidth * 0.75 - 100,
     },
-    data
+    undefined
   );
-  let smolWidth = window.innerWidth / 2.25;
-  let smolHeight = smolWidth / 1.25;
+  let choroWidth = window.innerWidth / 2.25;
+  let choroHeight = choroWidth / 1.25;
   const vetChoroplethMap = new ChoroplethMap(
     {
       parentElement: "#vetChoropleth",
-      containerHeight: smolHeight,
-      containerWidth: smolWidth,
+      containerHeight: choroHeight,
+      containerWidth: choroWidth,
     },
     data,
     barGraph,
@@ -118,8 +125,8 @@ d3.csv("../data/desired_data.csv").then(function (data) {
   const nonVetChoroplethMap = new ChoroplethMap(
     {
       parentElement: "#nonVetChoropleth",
-      containerHeight: smolHeight,
-      containerWidth: smolWidth,
+      containerHeight: choroHeight,
+      containerWidth: choroWidth,
     },
     data,
     barGraph,
@@ -128,8 +135,8 @@ d3.csv("../data/desired_data.csv").then(function (data) {
   const comboChoroplethMap = new ChoroplethMap(
     {
       parentElement: "#comboChoropleth",
-      containerHeight: 625,
-      containerWidth: 850,
+      containerHeight: choroHeight,
+      containerWidth: choroWidth,
     },
     data,
     barGraph,

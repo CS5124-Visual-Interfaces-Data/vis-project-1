@@ -1,3 +1,5 @@
+import { HealthIndicators } from "./bargraph.js";
+
 // overall structure is from https://codesandbox.io/p/sandbox/github/UBC-InfoVis/2021-436V-examples/tree/master/d3-choropleth-map?file=%2Fjs%2FchoroplethMap.js%3A9%2C20-18%2C27
 export const ChoroplethMapTypes = {
   Vet: "Vet",
@@ -21,6 +23,7 @@ export class ChoroplethMap {
     this.data = _data;
     this.barGraph = barGraph;
     this.type = type;
+    this.popup = document.getElementById("popup");
 
     this.initVis();
   }
@@ -54,9 +57,6 @@ export class ChoroplethMap {
         `translate(${vis.config.margin.left},${vis.config.margin.top})`
       );
 
-    // get popup for handling click events
-    vis.popup = document.getElementById("#popup");
-
     // Initialize projection and path generator
     vis.projection = d3
       .geoAlbersUsa()
@@ -67,16 +67,6 @@ export class ChoroplethMap {
     // Define color scale
     vis.vetColorScale = d3.scaleQuantize().range(d3.schemeBlues[9]);
     vis.nonVetColorScale = d3.scaleQuantize().range(d3.schemeReds[9]);
-
-    // Initialize gradients that we will later use for the legends
-    vis.vetLinearGradient = vis.svg
-      .append("defs")
-      .append("linearGradient")
-      .attr("id", "vet-legend-gradient");
-    vis.nonVetLinearGradient = vis.svg
-      .append("defs")
-      .append("linearGradient")
-      .attr("id", "non-vet-legend-gradient");
 
     // Append legends
     vis.vetLegend = vis.chart
@@ -178,10 +168,25 @@ export class ChoroplethMap {
     vis.projection.fitSize([vis.width, vis.height], counties);
 
     // Create SVG definitions for patterns
-    const defs = vis.chart.append("defs");
+    const gradientContainer = d3
+      .select("body")
+      .append("svg")
+      .attr("width", 0)
+      .attr("height", 0);
+    const gradientDefs = gradientContainer.append("defs");
+
+    // Initialize gradients that we will later use for the legends
+    // IMPORTANT, APPLY TO BODY webkit deloads these on efficent display=none animations
+    // chart no worky
+    vis.vetLinearGradient = gradientDefs
+      .append("linearGradient")
+      .attr("id", "vet-legend-gradient");
+    vis.nonVetLinearGradient = gradientDefs
+      .append("linearGradient")
+      .attr("id", "non-vet-legend-gradient");
 
     // Define pattern for veteran disabilities
-    const vetPattern = defs
+    const vetPattern = gradientDefs
       .append("pattern")
       .attr("id", "vet-striped")
       .attr("height", 1)
@@ -203,7 +208,7 @@ export class ChoroplethMap {
       .attr("fill", "white");
 
     // Define pattern for non-veteran disabilities
-    const nonVetPattern = defs
+    const nonVetPattern = gradientDefs
       .append("pattern")
       .attr("id", "nonvet-striped")
       .attr("height", 1)
@@ -239,16 +244,19 @@ export class ChoroplethMap {
           (f) => f.cnty_fips === +d.id
         )?.NonVetsDisabilty;
 
-        if (vetVal === undefined) return "url(#lightstripe)";
-
+        // depending on graph type, color the graph accordingly
         switch (vis.type) {
           case ChoroplethMapTypes.Vet:
+            if (vetVal === undefined) return "url(#lightstripe)";
             return vis.vetColorScale(vetVal);
             break;
           case ChoroplethMapTypes.NonVet:
+            if (nonVetVal === undefined) return "url(#lightstripe)";
             return vis.nonVetColorScale(nonVetVal);
             break;
           case ChoroplethMapTypes.Combo:
+            if (vetVal === undefined && nonVetVal === undefined)
+              return "url(#lightstripe)";
             if (vetVal && nonVetVal && vis.type) {
               return `url(#${vis.createStripedPattern(
                 vis.vetColorScale(vetVal),
@@ -266,16 +274,42 @@ export class ChoroplethMap {
 
     countyPath
       .on("mousemove", (event, d) => {
-        const popDensity = d.properties.pop_density
-          ? `<strong>${d.properties.pop_density}</strong> pop. density per km<sup>2</sup>`
-          : "No data available";
+        const value = vis.data.find((f) => f.cnty_fips === +d.id);
+        // make text for hover tooltip
+        let details = "";
+        // add disability info depending on graph type
+        if (
+          vis.type === ChoroplethMapTypes.Vet ||
+          vis.type === ChoroplethMapTypes.Combo
+        )
+          details += `<strong>Disabled Veterans</strong> ${
+            value?.VetsDisabilty ?? "no data provided"
+          }<br>`;
+        if (
+          vis.type === ChoroplethMapTypes.NonVet ||
+          vis.type === ChoroplethMapTypes.Combo
+        )
+          details += `<strong>Disabled Non-veterans</strong> ${
+            value?.NonVetsDisabilty ?? "no data provided"
+          }<br>`;
+        // add health indicators
+        details += HealthIndicators.map((healthIndicator) => {
+          const valueText =
+            value?.[healthIndicator.columnName]?.toString() ??
+            "no data provided";
+          // put % behind value if it's not undefined
+          return `<strong>${healthIndicator.displayName}</strong> ${valueText}${
+            valueText !== "no data provided" ? "%" : ""
+          }`;
+        }).join("<br>");
+        details += "<br><i>Click for graph view</i>";
         d3
           .select("#tooltip")
           .style("display", "block")
           .style("left", event.pageX + vis.config.tooltipPadding + "px")
           .style("top", event.pageY + vis.config.tooltipPadding + "px").html(`
               <div class="tooltip-title">${d.properties.name}</div>
-              <div>${popDensity}</div>
+              <div>${details}</div>
             `);
       })
       .on("mouseleave", () => {
@@ -288,6 +322,10 @@ export class ChoroplethMap {
         // Update vis.data and trigger update
         vis.barGraph.data = regionSpecificData;
         vis.barGraph.updateVis();
+
+        // update popup title
+        document.getElementById("popup-title").innerText =
+          "Quality of Life in " + d.properties.name;
 
         vis.popup.style.display = "block";
       });

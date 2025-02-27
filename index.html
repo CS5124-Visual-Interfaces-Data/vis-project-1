@@ -6,6 +6,12 @@
   </head>
   <body>
     <h1>Quality of Life for Disabled Veterans and Non-Veterans</h1>
+    <i
+      >Github Repo:
+      <a href="https://github.com/CS5124-Visual-Interfaces-Data/vis-project-1"
+        >https://github.com/CS5124-Visual-Interfaces-Data/vis-project-1</a
+      ></i
+    >
     <svg height="5" width="5" xmlns="http://www.w3.org/2000/svg" version="1.1">
       <defs>
         <pattern
@@ -40,13 +46,12 @@
       </div>
     </div>
     <div id="popup">
-      <div id="#popup-focus-trap">
-        <button id="popup-exit">X</button>
-        <div id="bargraph-container">
-          <svg id="bargraph"></svg>
-        </div>
-      </div>
       <div id="popup-focus-trap"></div>
+      <div id="popup-card">
+        <button id="popup-exit">X</button>
+        <h1 id="popup-title">Quality of Life in ...</h1>
+        <svg id="bargraph"></svg>
+      </div>
     </div>
     <div id="tooltip"></div>
     <script type="module" src="./js/main.js"></script>
