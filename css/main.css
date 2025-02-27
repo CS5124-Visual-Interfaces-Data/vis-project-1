@@ -167,3 +167,47 @@ h6 {
   transform: translateX(-50%);
   padding-bottom: 5em;
 }
+
+.info-icon {
+  position: relative;
+  display: inline-block;
+}
+
+.info-icon::before {
+  content: "i";
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: #3498db;
+  color: white;
+  text-align: center;
+  line-height: 20px;
+  cursor: help;
+  transition: transform 0.2s ease;
+}
+
+.info-icon:hover::before {
+  transform: scale(1.1);
+}
+
+.tooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 8px;
+  background-color: #333;
+  color: white;
+  border-radius: 4px;
+  font-size: 14px;
+  white-space: nowrap;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.info-icon:hover .tooltip {
+  visibility: visible;
+  opacity: 1;
+}
