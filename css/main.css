@@ -154,3 +154,16 @@ h6 {
 #popup-title {
   padding-left: 50px;
 }
+
+#scatter-container {
+  position: relative;
+  top: calc(100vw * 0.4);
+}
+
+#scatterplot {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  padding-bottom: 5em;
+}

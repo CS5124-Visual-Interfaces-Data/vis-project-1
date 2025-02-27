@@ -1,5 +1,6 @@
 import { ChoroplethMapTypes, ChoroplethMap } from "./choropleth.js";
 import { BarGraph } from "./bargraph.js";
+import { ScatterPlot } from "./scatterplot.js";
 
 // Read Data
 d3.csv("../data/desired_data.csv").then(function (data) {
@@ -136,6 +137,17 @@ d3.csv("../data/desired_data.csv").then(function (data) {
     {
       parentElement: "#comboChoropleth",
       containerHeight: choroHeight,
+      containerWidth: choroWidth,
+    },
+    data,
+    barGraph,
+    ChoroplethMapTypes.Combo
+  );
+
+  const scatterPlot = new ScatterPlot(
+    {
+      parentElement: "#scatterplot",
+      containerHeight: choroHeight * 0.5,
       containerWidth: choroWidth,
     },
     data,
