@@ -7,10 +7,6 @@
 
 This repository contains a visualization focusing on Disabled Veterans and Disabled Non-Veterans. Specifically it displays their locations in the US alongside quality of life data.
 
-## Live Preview
-
-View the live demo at: https://project-1-demo-vis.netlify.app/
-
 ## Getting Started
 
 To work with this project locally:
@@ -81,29 +77,55 @@ For instance, the southwest has a large number of people with disabilities. One 
 ### Structure
 
 <pre>
-<a href="data/desired_data_creator.py">[data/desired_data_creator.py]</a>
-├── <a href="css/">[css/]</a>
-│   ├── <a href="css/fonts/">[fonts/]</a>                         # Google Fonts collection
-│   └── <a href="css/main.css">[main.css]</a>
-├── <a href="data/">[data/]</a>
-│   ├── <a href="data/Rural_Atlas_Update24/">[Rural_Atlas_Update24/]</a>          # Veteran data
-│   ├── <a href="data/desired_data_creator.py">[desired_data_creator.py]</a>        # Data processing script
-│   ├── <a href="data/desired_data.csv">[desired_data.csv]</a>               # Processed data output
-│   └── <a href="data/national_health_data_2024.csv">[national_health_data_2024.csv]</a>  # Quality of life data
-├── <a href="js/">[js/]</a>
-│   ├── <a href="js/libs/">[libs/]</a>                          # External libraries
-│   ├── <a href="js/main.js">[main.js]</a>
-│   └── <a href="js/visualization/">[visualization/]</a>                 # Visualization-specific JS files
-├── <a href="index.html">[index.html]</a>
-└── <a href="README.md">[README.md]</a>
+<a href="css/">[css/]</a>
+├── <a href="css/fonts/">[fonts/]</a>                         # Google Fonts collection
+└── <a href="css/main.css">[main.css]</a>
+<a href="data/">[data/]</a>
+├── <a href="data/Rural_Atlas_Update24/">[Rural_Atlas_Update24/]</a>          # Veteran data
+├── <a href="data/desired_data_creator.py">[desired_data_creator.py]</a>        # Data processing script
+├── <a href="data/desired_data.csv">[desired_data.csv]</a>               # Processed data output
+└── <a href="data/national_health_data_2024.csv">[national_health_data_2024.csv]</a>  # Quality of life data
+<a href="js/">[js/]</a>
+├── <a href="js/libs/">[libs/]</a>                          # External libraries
+├── <a href="js/main.js">[main.js]</a>
+└── <a href="js/visualization/">[visualization/]</a>                 # Visualization-specific JS files
+<a href="index.html">[index.html]</a>
+<a href="README.md">[README.md]</a>
 </pre>
 
-1 section on your process- what libraries did you use? How did you structure your code? How can you access it and run it? Link to your code (and the live application, if it is deployed online).
+### Demo
 
-1 section on challenges and future work: perhaps you struggled with the project and learned a lot, but maybe there wasn't quite time to create the project you hoped to have. It may feel like you don't have as much to write in your documentation, so you can include
-'future works' section where you describe what you wanted to do
-'challenges' section, where you describe what technical difficulties you encountered while doing this project, and reflect on how you might approach future projects.
+View the live demo at: https://project-1-demo-vis.netlify.app/
 
-1 section on use of AI and collaboration with other students- Did you use AI? I want to learn form you how you used it. Note any peers who were helpful in debugging or learning as you worked on your project.
+## Challenges & Future Work
 
-Include a 2-3 minute demo video, showing your application in action. The easiest way to record this is with a screen capture tool, which also captures audio- such as Quicktime. Use a voiceover or video captions to explain your application. Demo videos should be sufficient on their own, but can reference your documentation. Include the name of the project, your name, the project components, and how your application works. You can present it on your webpage or on youtube, but linked on your webpage.
+### Challenges
+
+I had a webkit issue where, when display is set to none and back to block, pattern fills will disappear. I was able to fix this by appending my fill patterns to body directly instead of the charts I was animating and toggling.
+
+### Future Work
+
+I did not get to implement the brush filtering for the choropleth maps. The idea was to add a brush to the bottom scatterplot and use it to choose the range of population values to display on all of the choropleth maps. This would have allowed smaller differences to be easier seen. Some large data points like in LA make smaller ones really hard to distinguish from one another.
+
+I need to give myself more time to work on these projects so that I can accomplish more within the time limit.
+
+## AI & Collaboration
+
+### AI
+
+I made use of an AI chatbot called Phind: https://www.phind.com/
+It has a references feature that helped me find helpful stackoverflow articles and d3 documentation pages. It was very helpful in making the stripe pattern and in finding the webkit pattern bug.
+
+### Collaboration
+
+I did not interact with anyone else about this project. In the future I want to show the site to less technical friends and family to get more feedback on the visuals.
+
+## Videos
+
+### Overview
+
+https://youtu.be/d6bMap8hSPs
+
+### Demo
+
+https://youtu.be/BrvLwLFPuDU
