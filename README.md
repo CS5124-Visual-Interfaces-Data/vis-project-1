@@ -7,13 +7,6 @@
 
 This repository contains a visualization focusing on Disabled Veterans and Disabled Non-Veterans. Specifically it displays their locations in the US alongside quality of life data.
 
-### Features
-
-- Click "Combined" to get a view of both data points (veterans and non-veterans) overlaid on one another.
-- Hover over counties to see the exact numbers of disable peoples, alongside quality of life statistics
-- Clicking on a country opens a pop-up displaying a histogram with the aforementioned quality of life metrics
-- Below is a scatter plot, where each point is an individual county.
-
 ## Live Preview
 
 View the live demo at: https://project-1-demo-vis.netlify.app/
@@ -40,3 +33,77 @@ git clone https://github.com/CS5124-Visual-Interfaces-Data/vis-project-1.git
 3. Your browser will automatically open with the running application
 
 Alternatively, you can right-click any HTML file in the Explorer panel and select "Open with Live Server" to start the development server.
+
+# Documentation
+
+### Motivation
+
+I wanted to see the differences in quality of life in areas with high disability and to look for any differences between veterans and non-veterans.
+
+### Data
+
+Data was taken from the following sources:
+
+- https://www.ers.usda.gov/data-products/atlas-of-rural-and-small-town-america
+- https://www.cdc.gov/dhdsp/maps/atlas/index.htm
+
+They were compiled into one .csv with python (removed unused columns), to make loading faster.
+
+- The python file can be found at:
+  [data/desired_data_creator.py](data/desired_data_creator.py)
+- The csv file can be found at:
+  [data/desired_data_creator.py](data/desired_data.csv)
+
+The original .csv files can be found in the data directory
+
+### Visualization Components
+
+- Click "Combined" to get a view of both data points (veterans and non-veterans) overlaid on one another.
+- Hover over counties to see the exact numbers of disabled peoples, alongside quality of life statistics
+- Clicking on a country opens a pop-up displaying a histogram with the aforementioned quality of life metrics
+- A scatter plot sits at the bottom of the page, where each point is an individual county.
+
+### Discovery
+
+This visualization enables users to explore the geographical differences between disabled veterans and disabled non-veterans. The quality of life metrics can also create questions of how disability effects a county's overall quality of life.
+
+For instance, the southwest has a large number of people with disabilities. One of these large populations is Los Angeles. Despite what one might think, inactivity in this county is way lower than in other parts of the US. Hovering over LA reveals a 19% rate, while a wandering mouse will pick up rates of 20% and 30% in areas with low amounts of people with disabilities.
+
+## Process
+
+### Libraries
+
+- d3
+  - Main javascript library used to make interactable svg visualizations
+- topojson
+  - Library used to draw map svgs and cdn for map svg data.
+
+### Structure
+
+<pre>
+<a href="data/desired_data_creator.py">[data/desired_data_creator.py]</a>
+├── <a href="css/">[css/]</a>
+│   ├── <a href="css/fonts/">[fonts/]</a>                         # Google Fonts collection
+│   └── <a href="css/main.css">[main.css]</a>
+├── <a href="data/">[data/]</a>
+│   ├── <a href="data/Rural_Atlas_Update24/">[Rural_Atlas_Update24/]</a>          # Veteran data
+│   ├── <a href="data/desired_data_creator.py">[desired_data_creator.py]</a>        # Data processing script
+│   ├── <a href="data/desired_data.csv">[desired_data.csv]</a>               # Processed data output
+│   └── <a href="data/national_health_data_2024.csv">[national_health_data_2024.csv]</a>  # Quality of life data
+├── <a href="js/">[js/]</a>
+│   ├── <a href="js/libs/">[libs/]</a>                          # External libraries
+│   ├── <a href="js/main.js">[main.js]</a>
+│   └── <a href="js/visualization/">[visualization/]</a>                 # Visualization-specific JS files
+├── <a href="index.html">[index.html]</a>
+└── <a href="README.md">[README.md]</a>
+</pre>
+
+1 section on your process- what libraries did you use? How did you structure your code? How can you access it and run it? Link to your code (and the live application, if it is deployed online).
+
+1 section on challenges and future work: perhaps you struggled with the project and learned a lot, but maybe there wasn't quite time to create the project you hoped to have. It may feel like you don't have as much to write in your documentation, so you can include
+'future works' section where you describe what you wanted to do
+'challenges' section, where you describe what technical difficulties you encountered while doing this project, and reflect on how you might approach future projects.
+
+1 section on use of AI and collaboration with other students- Did you use AI? I want to learn form you how you used it. Note any peers who were helpful in debugging or learning as you worked on your project.
+
+Include a 2-3 minute demo video, showing your application in action. The easiest way to record this is with a screen capture tool, which also captures audio- such as Quicktime. Use a voiceover or video captions to explain your application. Demo videos should be sufficient on their own, but can reference your documentation. Include the name of the project, your name, the project components, and how your application works. You can present it on your webpage or on youtube, but linked on your webpage.
